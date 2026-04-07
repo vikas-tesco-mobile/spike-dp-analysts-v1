@@ -1,0 +1,143 @@
+version: 2
+
+models:
+  - name: tesco_sales_transactions
+    description: |
+      """Gold model for TAP sales transactions combining in-store and online mappings"""
+    config:
+      meta:
+        "owner__tech": "TBD"
+        "data__supplier": "TAP"
+        "data__domain": "finance"
+        "pii__exists": "false"
+        "pii__classification": "TBD"
+    columns:
+      - name: transaction_number
+        description: "Invoice/transaction identifier"
+        tests:
+          - not_null
+      - name: transaction_date
+        description: "Raw transaction datetime"
+      - name: transaction_source
+        description: "Derived source of transaction: instore or online"
+      - name: order_id
+        description: "Order reference (missing mapping placeholder if not provided)"
+      - name: order_reference
+        description: "Order reference from source"
+      - name: location_id
+        description: "Store location identifier"
+      - name: order_number
+        description: "Order number"
+      - name: created_date
+        description: "Transaction date (parsed from transaction_date)"
+        tests:
+          - not_null
+      - name: dispatch_date
+        description: "Dispatch datetime"
+      - name: fulfilment_date
+        description: "Fulfilment datetime"
+      - name: return_date
+        description: "Return datetime"
+      - name: number_of_units
+        description: "Number of units sold"
+      - name: price_before_discounts_amount
+        description: "Price before discounts GBP"
+      - name: price_after_discounts_amount
+        description: "Price after discounts GBP"
+      - name: refund_amount
+        description: "Refund amount GBP"
+      - name: description
+        description: "Product description"
+      - name: invoice_id
+        description: "Invoice identifier (same as transaction_number)"
+      - name: customer_id
+        description: "Customer identifier"
+      - name: tax_band
+        description: "Tax band"
+      - name: vat_amount
+        description: "VAT amount GBP"
+      - name: apportioned_earned_points
+        description: "Clubcard points earned"
+      - name: tpnb
+      - name: subclass_code
+        description: "Product subclass code"
+      - name: subclass_name
+        description: "Product subclass name"
+      - name: brand
+        description: "Product brand"
+      - name: colleague_discount_amount
+        description: "Colleague discount amount GBP"
+      - name: coupon_discount_amount
+        description: "Coupon discount amount GBP"
+      - name: multi_saver_discount_amount
+        description: "Multi-saver discount amount GBP"
+      - name: reduced_to_clear
+      - name: "price_cut_discount_amount"
+        description: "Price cut discount amount GBP"
+      - name: net_amount
+        description: "Net amount GBP"
+      - name: checked_out_date
+        description: "Checked out datetime"
+      - name: promotion_value
+      - name: price_cut
+      - name: rtc
+        description: "RTC metric"
+      - name: simple_promo
+        description: "Simple promo amount"
+      - name: net_sales_sp
+      - name: voucher_redeem
+      - name: coupon_redeem
+      - name: colleague_pct
+        description: "Colleague discount percentage"
+      - name: clubcard_plus_pct
+        description: "Clubcard Plus percentage"
+      - name: basket_promo
+        description: "Basket promotion amount"
+      - name: net_sales_bp
+        description: "Net sales BP"
+      - name: transaction_end_datetime
+        description: "Transaction end datetime"
+      - name: unit_of_measure
+        description: "Unit of measure"
+      - name: product_id
+        description: "Product identifier (from unique_product_key)"
+      - name: gtin
+        description: "Global Trade Item Number"
+      - name: tpna
+      - name: tpnc
+      - name: transaction_start_datetime
+        description: "Transaction start datetime"
+      - name: retail_outlet_number
+        description: "Retail outlet (store) number"
+      - name: debit_credit
+        description: "Debit/Credit indicator"
+      - name: multi_buy_promo_description
+        description: "Multi-buy promo description"
+      - name: return_reason
+        description: "Return reason"
+      - name: store_format_code
+        description: "Store format code"
+      - name: store_format_description
+        description: "Store format description"
+      - name: checkout_no
+        description: "Checkout/register number"
+      - name: clubcard_number
+        description: "Clubcard number"
+      - name: item_selling_price
+        description: "Item selling price"
+      - name: item_number
+        description: "Item number (from unique_product_key)"
+      - name: effective_pricing_date
+        description: "Effective pricing date"
+      - name: quote_id
+        description: "Quote identifier"
+      - name: event_id
+        description: "Event identifier"
+      - name: apportioned_burned_points
+        description: "Apportioned burned points"
+      - name: rtd
+        description: "RTD metric"
+      - name: qualities
+        description: "Qualities metric"
+      - name: headline
+        description: "Headline metric"

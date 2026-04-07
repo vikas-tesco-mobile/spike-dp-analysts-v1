@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: intermediate_blugem_usage_root
+    description: "Intermediate Blugem root event model used to prepare the base event attributes and start timestamp."
+    config:
+      meta:
+        "owner__tech": "Revenue Assurance Team"
+        "data__supplier": "MATRIX"
+        "data__domain": "Revenue Assurance"
+        "pii__exists": "false"
+        "pii__classification": "TBD"

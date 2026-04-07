@@ -1,0 +1,91 @@
+version: 2
+
+models:
+  - name: blugem_ccs_usage_reconciliation
+    description: "Curated CCS usage reconciliation model built from the combined usage source shape with aggregated balance and allowance measures"
+    config:
+      meta:
+        "owner__tech": "Revenue Assurance Team"
+        "data__supplier": "MATRIX"
+        "data__domain": "Revenue Assurance"
+        "pii__exists": "false"
+        "pii__classification": "TBD"
+    tests:
+      - assert_single_value_per_group:
+          key_column: event_id
+          value_columns:
+            - usage_quantity
+            - rating_amount
+
+    columns:
+      - name: mtx_container_name
+        description: "MATRIX container name identifying the event type"
+      - name: event_id
+        description: "Unique identifier for the usage event"
+        data_tests:
+          - not_null
+          - unique
+      - name: msisdn
+        description: "Mobile subscriber ISDN"
+      - name: status_value
+        description: "Status value from the primary event attributes"
+      - name: segment
+        description: "Subscriber segment from the primary event attributes"
+      - name: calling_station_id
+        description: "Calling party station identifier"
+      - name: called_station_id
+        description: "Called party station identifier"
+      - name: start_date_time
+        description: "Start timestamp used for the usage event, formatted for CSV export as yyyy-MM-dd HH:mm:ss"
+      - name: end_date_time
+        description: "End timestamp used for the usage event, formatted for CSV export as yyyy-MM-dd HH:mm:ss"
+      - name: usage_quantity
+        description: "Single message or usage amount expected per event"
+      - name: rating_amount
+        description: "Single rating amount expected per event"
+      - name: cost_amount
+        description: "Aggregated balance amount filtered to balance class id 826"
+      - name: cost_breakdown
+        description: "Pipe-delimited ordered charge values"
+      - name: role_of_node_name
+        description: "Role of node name for the event"
+      - name: service_classification
+        description: "Service classification for the event"
+      - name: composite_usage_type
+        description: "Composite usage type for the event"
+      - name: allowance_balance
+        description: "Aggregated allowance balance filtered to balance class ids 20007, 20006, and 20003"
+      - name: allowance_balance_breakdown
+        description: "Pipe-delimited ordered allowance balance values"
+      - name: gross_amount_after
+        description: "Aggregated gross amount after filtered to balance class ids 20007, 20006, and 20003"
+      - name: gross_amount_after_breakdown
+        description: "Pipe-delimited ordered gross-amount-after values"
+      - name: wallet_id
+        description: "Wallet identifier"
+      - name: wallet_owner_external_id
+        description: "External identifier for the wallet owner"
+      - name: wallet_owner_id
+        description: "Internal identifier for the wallet owner"
+      - name: wallet_owner_type
+        description: "Wallet owner type"
+      - name: unique_sequence_id
+        description: "Unique event sequence identifier"
+      - name: initiator_device_external_id
+        description: "External identifier of the initiating device"
+      - name: initiator_device_id
+        description: "Internal identifier of the initiating device"
+      - name: initiator_external_id
+        description: "External identifier of the initiator"
+      - name: initiator_id
+        description: "Internal identifier of the initiator"
+      - name: tax_code
+        description: "Tax code associated with the event"
+      - name: idd_cc_name
+        description: "International direct dialing country name"
+      - name: idd_cc_region
+        description: "International direct dialing country region"
+      - name: origination_cc_name
+        description: "Origination country name"
+      - name: origination_cc_region
+        description: "Origination country region"

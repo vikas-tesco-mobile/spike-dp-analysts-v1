@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: intermediate_blugem_usage_balance
+    description: "Intermediate Blugem balance model used to expose per-row cost, allowance, and gross amount values before aggregation."
+    config:
+      meta:
+        "owner__tech": "Revenue Assurance Team"
+        "data__supplier": "MATRIX"
+        "data__domain": "Revenue Assurance"
+        "pii__exists": "false"
+        "pii__classification": "TBD"

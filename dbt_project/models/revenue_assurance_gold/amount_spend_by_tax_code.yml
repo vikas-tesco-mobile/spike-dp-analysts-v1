@@ -1,0 +1,126 @@
+version: 2
+
+models:
+  - name: amount_spend_by_tax_code
+    description: "Curated usage event EDR data filtered for tax code 20 and balance class 826 with aggregated spend"
+    config:
+      meta:
+        "owner__tech": "Revenue Assurance Team"
+        "data__supplier": "MATRIX"
+        "data__domain": "Revenue Assurance"
+        "pii__exists": "false"
+        "pii__classification": "TBD"
+
+    columns:
+      - name: event_type
+        description: "Type of event"
+        data_tests:
+          - not_null
+      - name: event_date
+        description: "Event date (derived from event_datetime_utc)"
+        data_tests:
+          - not_null
+      - name: aggregation_id
+        description: "Aggregation identifier"
+      - name: msisdn
+        description: "Mobile subscriber ISDN"
+      - name: idd_cc_name
+        description: "IDD country code name"
+      - name: idd_cc_region
+        description: "IDD country code region"
+      - name: origination_cc_name
+        description: "Origination country code name"
+      - name: origination_cc_region
+        description: "Origination country code region"
+      - name: service_classification
+        description: "Service classification"
+      - name: tax_code
+        description: "Tax code (filtered to 20)"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['20']
+      - name: tax_name
+        description: "Tax name"
+        data_tests:
+          - not_null
+      - name: tax_rate
+        description: "Tax rate"
+        data_tests:
+          - not_null
+      - name: external_id
+        description: "External identifier from tax array"
+      - name: balance_class_id
+        description: "Balance class identifier (filtered to 826)"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [826]
+      - name: spend_amount
+        description: "Aggregated spend amount from balance class 826"
+        data_tests:
+          - not_null
+
+unit_tests:
+  - name: filters_tax_code_20_and_balance_class_id_826_and_aggregates_correctly
+    model: amount_spend_by_tax_code
+    given:
+      - input: source('vmo2_revenue_assurance_silver', 'usage_root_cleaned')
+        format: sql
+        rows: |
+          select cast('1' as string) as event_id, cast('VMO2DataEvent' as string) as event_type, cast('2024-01-01 10:00:00' as timestamp) as event_datetime_utc, cast('0-1-19-256791' as string) as aggregation_id, cast('447700900001' as string) as msisdn, cast('UK' as string) as idd_cc_name, cast('EU' as string) as idd_cc_region, cast('UK' as string) as origination_cc_name, cast('EU' as string) as origination_cc_region, cast('MOBILE' as string) as service_classification
+          union all
+          select cast('2' as string), cast('VMO2DataEvent' as string), cast('2024-01-02 12:00:00' as timestamp), cast('0-1-19-256791' as string), cast('447700900001' as string), cast('UK' as string), cast('EU' as string), cast('UK' as string), cast('EU' as string), cast('MOBILE' as string)
+          union all
+          select cast('3' as string), cast('VMO2DataEvent' as string), cast('2024-01-03 12:00:00' as timestamp), cast('0-1-19-256791' as string), cast('447700900001' as string), cast('UK' as string), cast('EU' as string), cast('UK' as string), cast('EU' as string), cast('MOBILE' as string)
+
+      - input: source('vmo2_revenue_assurance_silver', 'usage_applied_tax_cleaned')
+        format: sql
+        rows: |
+          select cast('1' as string) as event_id, cast('20' as string) as tax_code, cast('VAT' as string) as tax_name, cast(0.2 as double) as tax_rate, cast('VAT Standard' as string) as external_id
+          union all
+          select cast('3' as string), cast('20' as string), cast('VAT' as string), cast(0.2 as double), cast('VAT Standard' as string)
+          union all
+          select cast('2' as string), cast('10' as string), cast('OTHER' as string), cast(0.1 as double), cast('VAT Standard' as string)
+
+      - input: source('vmo2_revenue_assurance_silver', 'usage_balance_update_cleaned')
+        format: sql
+        rows: |
+          select cast('1' as string) as event_id, cast(826 as int) as balance_class_id, cast(1.25 as double) as balance_amount
+          union all
+          select cast('3' as string), cast(826 as int), cast(2.0 as double)
+          union all
+          select cast('2' as string), cast(20007 as int), cast(5700.0 as double)
+
+    expect:
+      rows:
+        - event_type: "VMO2DataEvent"
+          aggregation_id: "0-1-19-256791"
+          msisdn: "447700900001"
+          idd_cc_name: "UK"
+          idd_cc_region: "EU"
+          origination_cc_name: "UK"
+          origination_cc_region: "EU"
+          service_classification: "MOBILE"
+          tax_code: "20"
+          tax_name: "VAT"
+          tax_rate: 0.2
+          external_id: "VAT Standard"
+          balance_class_id: 826
+          event_date: "2024-01-01"
+          spend_amount: 1.25
+        - event_type: "VMO2DataEvent"
+          aggregation_id: "0-1-19-256791"
+          msisdn: "447700900001"
+          idd_cc_name: "UK"
+          idd_cc_region: "EU"
+          origination_cc_name: "UK"
+          origination_cc_region: "EU"
+          service_classification: "MOBILE"
+          tax_code: "20"
+          tax_name: "VAT"
+          tax_rate: 0.2
+          external_id: "VAT Standard"
+          balance_class_id: 826
+          event_date: "2024-01-03"
+          spend_amount: 2.0

@@ -1,0 +1,60 @@
+version: 2
+
+models:
+  - name: online_sales_transactions
+    description: |
+      """Gold model for TAP online sales transactions"""
+    config:
+      meta:
+        "owner__tech": "TBD"
+        "data__supplier": "TAP"
+        "data__domain": "finance"
+        "pii__exists": "false"
+        "pii__classification": "TBD"
+    columns:
+      - name: transaction_source
+      - name: transaction_number
+        tests:
+          - not_null
+      - name: order_number
+        tests:
+          - not_null
+      - name: transaction_type
+      - name: order_date
+      - name: dispatch_date
+      - name: header_date
+      - name: product_id
+      - name: tpnb
+        tests:
+          - not_null
+      - name: gtin
+      - name: tpna
+      - name: tpnc
+      - name: product_description
+      - name: brand
+      - name: subclass_code
+      - name: subclass_name
+      - name: price_before_discount_amount
+      - name: price_after_discount_amount
+      - name: number_of_units
+      - name: return_reason_code
+      - name: order_id
+      - name: location_id
+      - name: fulfilment_date
+      - name: checked_out_date
+      - name: return_date
+      - name: unit_of_measure
+      - name: net_amount
+      - name: refund_amount
+      - name: colleague_discount_amount
+      - name: coupon_discount_amount
+      - name: multisaver_discount_amount
+      - name: price_cut_discount_amount
+      - name: multibuy_promo_description
+      - name: invoice_id
+      - name: customer_id
+      - name: tax_band
+      - name: vat_amount
+      - name: debit_credit
+      - name: apportioned_earned_points
+      - name: reduced_to_clear

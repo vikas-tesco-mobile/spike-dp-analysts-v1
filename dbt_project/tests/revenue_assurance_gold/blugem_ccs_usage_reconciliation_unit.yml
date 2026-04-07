@@ -1,0 +1,89 @@
+unit_tests:
+  - name: blugem_root_model
+    model: intermediate_blugem_usage_root
+    given:
+      - input: source('vmo2_revenue_assurance_silver', 'usage_root_cleaned')
+        format: sql
+        fixture: blugem_usage__event_usage_root_cleaned
+
+    expect:
+      format: sql
+      fixture: intermediate_blugem_usage_root__expected
+
+  - name: blugem_usage_model
+    model: intermediate_blugem_usage
+    given:
+      - input: source('vmo2_revenue_assurance_silver', 'usage_quantity_cleaned')
+        format: sql
+        fixture: blugem_usage__event_usage_quantity_cleaned
+
+    expect:
+      format: sql
+      fixture: intermediate_blugem_usage__expected
+
+  - name: blugem_balance_model
+    model: intermediate_blugem_usage_balance
+    given:
+      - input: source('vmo2_revenue_assurance_silver', 'usage_balance_update_cleaned')
+        format: sql
+        fixture: blugem_usage__event_balance_update_cleaned
+
+    expect:
+      format: sql
+      fixture: intermediate_blugem_usage_balance__expected
+
+  - name: blugem_balance_agg_model
+    model: intermediate_blugem_usage_balance_agg
+    given:
+      - input: ref('intermediate_blugem_usage_balance')
+        format: sql
+        fixture: intermediate_blugem_usage_balance__expected
+
+    expect:
+      format: sql
+      fixture: intermediate_blugem_usage_balance_agg__expected
+
+  - name: blugem_tax_model
+    model: intermediate_blugem_usage_tax
+    given:
+      - input: source('vmo2_revenue_assurance_silver', 'usage_applied_tax_cleaned')
+        format: sql
+        fixture: blugem_usage__event_tax_cleaned
+
+    expect:
+      format: sql
+      fixture: intermediate_blugem_usage_tax__expected
+
+  - name: blugem_combined_model
+    model: intermediate_blugem_usage_combined
+    given:
+      - input: ref('intermediate_blugem_usage_root')
+        format: sql
+        fixture: intermediate_blugem_usage_root__expected
+
+      - input: ref('intermediate_blugem_usage')
+        format: sql
+        fixture: intermediate_blugem_usage__expected
+
+      - input: ref('intermediate_blugem_usage_balance_agg')
+        format: sql
+        fixture: intermediate_blugem_usage_balance_agg__expected
+
+      - input: ref('intermediate_blugem_usage_tax')
+        format: sql
+        fixture: intermediate_blugem_usage_tax__expected
+
+    expect:
+      format: sql
+      fixture: intermediate_blugem_usage_combined__expected
+
+  - name: blugem_usage_pipe_breakdowns
+    model: blugem_ccs_usage_reconciliation
+    given:
+      - input: ref('intermediate_blugem_usage_combined')
+        format: sql
+        fixture: intermediate_blugem_usage_combined__expected
+
+    expect:
+      format: sql
+      fixture: blugem_ccs_usage_reconciliation__expected

@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: usage_event_charging_detail
+    description: "Key metrics used to analyse usage events from CCS data"
+    config:
+      meta:
+        "owner__tech": "TBD"
+        "data__supplier": "MATRIX"
+        "data__domain": "Revenue Assurance"
+        "pii__exists": "false"
+        "pii__classification": "TBD"
+    columns:
+      - name: event_id
+        description: "Key event identifier used for deduplication"
+        data_tests:
+          - not_null
+      - name: event_datetime_utc
+        description: "Event datetime in UTC format"
+        data_tests:
+          - not_null

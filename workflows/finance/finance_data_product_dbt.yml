@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://www.schemastore.org/databricks-asset-bundles.json
+resources:
+  jobs:
+    tesco_sales_transactions:
+      name: tesco_sales_transactions
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "4"
+            dependencies:
+              - "dbt-databricks>=1.11.2"
+      webhook_notifications:
+        on_failure:
+          - id: ${var.datahub_alert_slack_id}
+      trigger:
+        table_update:
+          condition: ALL_UPDATED
+          table_names:
+            - "${var.catalog}.tesco_finance_silver.tesco_locations_cleaned"
+            - "${var.catalog}.tesco_finance_silver.tesco_products_cleaned"
+      tasks:
+        - task_key: load_tesco_sales_transactions
+          environment_key: default
+          dbt_task:
+            project_directory: ../../dbt_project
+            commands:
+              - "dbt deps"
+              - "dbt build -s +datahub.finance_gold --target ${var.profile} --vars '{\"catalog\": \"${var.catalog}\"}'"

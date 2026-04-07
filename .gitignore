@@ -1,0 +1,43 @@
+# Virtual Environment
+.venv/
+.conda/
+.pipenv/
+
+# Compiled Python files
+**/__pycache__/
+*.pyc
+*.pyd
+*.pyo
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+.tox/
+.poetry
+
+# IDE-specific directories/files
+.idea/
+.vscode/
+*.sublime-workspace
+.project
+.settings/
+.directory
+
+# Operating System Files
+.DS_Store
+.Trashes
+Thumbs.db
+
+.databricks
+temp/
+
+# dbt
+**/dbt.log
+**/.user.yml
+**/target
+logs
+dbt_project/dbt_packages/
+
+# Ignore .env files
+.env

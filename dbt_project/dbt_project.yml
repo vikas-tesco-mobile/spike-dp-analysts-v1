@@ -1,0 +1,50 @@
+name: 'datahub'
+version: '1.0.0'
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'datahub'
+
+on-run-start:
+  - "{{ assert_developer_prefix() }}"
+
+vars:
+  catalog: "eun_dev_906_dh_data_db"
+  tesco_finance_silver_schema: tesco_finance_silver
+  vmo2_revenue_assurance_silver_schema: vmo2_revenue_assurance_silver
+  finance_gold_schema: finance_gold
+  developer_prefix: "{{ env_var('DEVELOPER_PREFIX', '') }}"
+
+# These configurations specify where dbt should look for different types of files.
+# The `model-paths` config, for example, states that models in this project can be
+# found in the "models/" directory. You probably won't need to change these!
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+
+# Configuring models
+# Full documentation: https://docs.getdbt.com/docs/configuring-models
+
+models:
+  datahub:
+    finance_gold:
+      +tags: ["finance_gold"]
+    revenue_assurance_gold:
+      +tags: ["revenue_assurance_gold"]
+
+data_tests:
+  datahub:
+    finance_gold:
+      +tags: ["finance_gold"]
+    revenue_assurance_gold:
+      +tags: ["revenue_assurance_gold"]
+
+unit_tests:
+  +enabled: "{{ target.name in ['dev', 'local'] }}"

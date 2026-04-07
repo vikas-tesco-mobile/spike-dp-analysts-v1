@@ -1,0 +1,187 @@
+version: 2
+sources:
+  - name: vmo2_revenue_assurance_silver
+    database: "{{ var('catalog') }}"
+    schema: "{{ var('vmo2_revenue_assurance_silver_schema') }}"
+    tables:
+
+      - name: usage_root_cleaned
+        description: "usage event root cleaned silver table from vmo2 ccs mft"
+        columns:
+          - name: event_id
+            tests:
+              - not_null
+          - name: event_datetime_utc
+            tests:
+              - not_null
+
+      - name: usage_charge_cleaned
+        description: "usage event charge cleaned silver table from vmo2 ccs mft"
+        columns:
+          - name: event_id
+            tests:
+              - not_null
+          - name: charge_list_index
+            tests:
+              - not_null
+          - name: applied_offer_index
+            tests:
+              - not_null
+          - name: balance_update_index
+            tests:
+              - not_null
+          - name: event_datetime_utc
+            tests:
+              - not_null
+        tests:
+          - dbt_expectations.expect_compound_columns_to_be_unique:
+              column_list:
+                - event_id
+                - charge_list_index
+                - applied_offer_index
+                - balance_update_index
+
+      - name: usage_applied_offer_cleaned
+        description: "usage event applied offer cleaned silver table from vmo2 ccs mft"
+        columns:
+          - name: event_id
+            tests:
+              - not_null
+          - name: product_offer_id
+            tests:
+              - not_null
+          - name: applied_offer_array_index
+            tests:
+              - not_null
+          - name: event_datetime_utc
+            tests:
+              - not_null
+        tests:
+          - dbt_expectations.expect_compound_columns_to_be_unique:
+              column_list:
+                - event_id
+                - product_offer_id
+                - applied_offer_array_index
+
+      - name: usage_applied_bundle_cleaned
+        description: "usage event applied bundle cleaned silver table from vmo2 ccs mft"
+        columns:
+          - name: event_id
+            tests:
+              - not_null
+          - name: bundle_id
+            tests:
+              - not_null
+          - name: event_datetime_utc
+            tests:
+              - not_null
+          - name: applied_catalog_item_index
+            tests:
+              - not_null
+          - name: applied_bundle_array_index
+            tests:
+              - not_null
+        tests:
+          - dbt_expectations.expect_compound_columns_to_be_unique:
+              column_list:
+                - event_id
+                - bundle_id
+                - applied_catalog_item_index
+                - applied_bundle_array_index
+
+      - name: usage_applied_catalog_item_cleaned
+        description: "usage event applied catalog item cleaned silver table from vmo2 ccs mft"
+        columns:
+          - name: event_id
+            tests:
+              - not_null
+          - name: applied_catalog_item_array_index
+            tests:
+              - not_null
+          - name: catalog_item_resource_id
+            tests:
+              - not_null
+          - name: event_datetime_utc
+            tests:
+              - not_null
+        tests:
+          - dbt_expectations.expect_compound_columns_to_be_unique:
+              column_list:
+                - event_id
+                - applied_catalog_item_array_index
+                - catalog_item_resource_id
+
+      - name: usage_applied_tax_cleaned
+        description: "usage event applied tax cleaned silver table from vmo2 ccs mft"
+        columns:
+          - name: event_id
+            tests:
+              - not_null
+          - name: tax_code
+            tests:
+              - not_null
+          - name: applied_tax_array_index
+            tests:
+              - not_null
+          - name: event_datetime_utc
+            tests:
+              - not_null
+        tests:
+          - dbt_expectations.expect_compound_columns_to_be_unique:
+              column_list:
+                - event_id
+                - tax_code
+                - applied_tax_array_index
+          - assert_single_value_per_group:
+              key_column: event_id
+              value_columns:
+                - tax_code
+
+      - name: usage_balance_update_cleaned
+        description: "usage event balance update cleaned silver table from vmo2 ccs mft"
+        columns:
+          - name: event_id
+            tests:
+              - not_null
+          - name: balance_class_id
+            tests:
+              - not_null
+          - name: balance_template_id
+            tests:
+              - not_null
+          - name: balance_update_array_index
+            tests:
+              - not_null
+          - name: event_datetime_utc
+            tests:
+              - not_null
+        tests:
+          - dbt_expectations.expect_compound_columns_to_be_unique:
+              column_list:
+                - event_id
+                - balance_class_id
+                - balance_template_id
+                - balance_update_array_index
+
+      - name: usage_quantity_cleaned
+        description: "usage event usage quantity cleaned silver table from vmo2 ccs mft"
+        columns:
+          - name: event_id
+            tests:
+              - not_null
+          - name: usage_quantity_list_index
+            tests:
+              - not_null
+          - name: event_datetime_utc
+            tests:
+              - not_null
+        tests:
+          - dbt_expectations.expect_compound_columns_to_be_unique:
+              column_list:
+                - event_id
+                - usage_quantity_list_index
+          - assert_single_value_per_group:
+              key_column: event_id
+              value_columns:
+                - usage_msg_amount
+                - usage_rating_amount

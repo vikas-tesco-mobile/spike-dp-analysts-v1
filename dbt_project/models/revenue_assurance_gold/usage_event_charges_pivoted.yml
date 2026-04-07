@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: usage_event_charges_pivoted
+    description: "Usage event data with balance information pivoted across multiple balance classes"
+    config:
+      meta:
+        "owner__tech": "TBD"
+        "data__supplier": "MATRIX"
+        "data__domain": "Revenue Assurance"
+        "pii__exists": "false"
+        "pii__classification": "TBD"
+    columns:
+      - name: event_type
+        description: "Type of usage event"
+      - name: event_id
+        description: "Unique identifier for the usage event"
+        data_tests:
+          - not_null
+          - unique
+      - name: event_datetime_utc
+        description: "Event time in UTC format"
+        data_tests:
+          - not_null
+      - name: aggregation_id
+        description: "Aggregation identifier for the event"
+      - name: msisdn
+        description: "Mobile station integrated services digital network number"
+      - name: called_station_id
+        description: "ID of the called station"
+      - name: calling_station_id
+        description: "ID of the calling station"
+      - name: call_answer_time
+        description: "Time when the call was answered"
+      - name: idd_cc_name
+        description: "International direct dialing country code name"
+      - name: idd_cc_region
+        description: "International direct dialing country code region"
+      - name: origination_cc_name
+        description: "Origination country code name"
+      - name: origination_cc_region
+        description: "Origination country code region"
+      - name: role_of_node
+        description: "Role of the network node"
+      - name: role_of_node_name
+        description: "Name of the network node role"
+      - name: service_classification
+        description: "Classification of the service"
+      - name: composite_usage_type
+        description: "Composite usage type for the event"
+      - name: balance_class_id_1
+        description: "First balance class identifier"
+      - name: balance_amount_1
+        description: "First balance amount"
+      - name: balance_class_id_2
+        description: "Second balance class identifier"
+      - name: balance_amount_2
+        description: "Second balance amount"
+      - name: balance_class_id_3
+        description: "Third balance class identifier"
+      - name: balance_amount_3
+        description: "Third balance amount"
+      - name: usage_msg_amount_1
+        description: "First usage message amount"
+      - name: usage_rating_amount_1
+        description: "First usage rating amount"

@@ -1,0 +1,35 @@
+datahub:
+  target: dev
+  outputs:
+    dev:
+      type: databricks
+      method: http
+      catalog: eun_dev_906_dh_data_db
+      schema: "" # This will be set by generate_schema_name macro 
+      host: adb-7405612648424970.10.azuredatabricks.net
+      http_path: /sql/1.0/warehouses/4851b60f09f69f6c
+      token: "{{ env_var('DBT_ACCESS_TOKEN', 'fallback') }}"
+    int:
+      type: databricks
+      method: http
+      catalog: eun_int_906_dh_data_db
+      schema: "" # This will be set by generate_schema_name macro
+      host: adb-7405615222768992.12.azuredatabricks.net
+      http_path: /sql/1.0/warehouses/b0ccc44f6bd70e0d
+      token: "{{ env_var('DBT_ACCESS_TOKEN', 'fallback') }}"
+    ppe:
+      type: databricks
+      method: http
+      catalog: eun_ppe_906_dh_data_db
+      schema: "" # This will be set by generate_schema_name macro
+      host: adb-7405605425276996.16.azuredatabricks.net
+      http_path: /sql/1.0/warehouses/64b974ac6ab0ba51
+      token: "{{ env_var('DBT_ACCESS_TOKEN', 'fallback') }}"
+    prod:
+      type: databricks
+      method: http
+      catalog: eun_prod_906_dh_data_db
+      schema: "" # This will be set by generate_schema_name macro
+      host: adb-7405616830679174.14.azuredatabricks.net
+      http_path: /sql/1.0/warehouses/05c5936315343ebe
+      token: "{{ env_var('DBT_ACCESS_TOKEN', 'fallback') }}"

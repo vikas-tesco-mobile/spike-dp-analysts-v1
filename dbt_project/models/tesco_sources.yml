@@ -1,0 +1,57 @@
+version: 2
+
+sources:
+  - name: tesco_finance_silver_schema
+    database: "{{ var('catalog') }}"
+    schema: "{{ var('tesco_finance_silver_schema') }}"
+    tables:
+      - name: tesco_quotes_cleaned
+        description: "Cleaned Tesco quotes data"
+        tests:
+          - not_null:
+              column_name: transaction_number
+          - unique:
+              column_name: transaction_number
+
+      - name: tesco_locations_cleaned
+        description: "Cleaned Tesco location data"
+        tests:
+          - not_null:
+              column_name: location_id
+          - unique:
+              column_name: location_id
+
+      - name: tesco_products_cleaned
+        description: "Cleaned Tesco location data"
+        tests:
+          - not_null:
+              column_name: product_id
+          - unique:
+              column_name: product_id
+
+      - name: tap_store_sales_cleaned
+        description: "Tap store sales"
+        tests:
+          - not_null:
+              column_name: invoice_id
+          - not_null:
+              column_name: unique_product_key
+          - not_null:
+              column_name: transaction_date
+          - dbt_expectations.expect_compound_columns_to_be_unique:
+              column_list: ["invoice_id", "unique_product_key"]
+        columns:
+          - name: transaction_date
+            tests:
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: date
+
+      - name: tap_online_sales_cleaned
+        description: "TAP online sales"
+        tests:
+          - not_null:
+              column_name: sale_identifier
+          - not_null:
+              column_name: base_product_number
+          - dbt_expectations.expect_compound_columns_to_be_unique:
+              column_list: ["sale_identifier", "base_product_number"]

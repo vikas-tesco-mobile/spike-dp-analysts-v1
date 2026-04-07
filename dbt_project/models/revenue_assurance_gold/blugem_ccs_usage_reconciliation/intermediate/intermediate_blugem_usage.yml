@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: intermediate_blugem_usage
+    description: "Intermediate Blugem usage model used to expose one usage quantity and rating amount row per event."
+    config:
+      meta:
+        "owner__tech": "Revenue Assurance Team"
+        "data__supplier": "MATRIX"
+        "data__domain": "Revenue Assurance"
+        "pii__exists": "false"
+        "pii__classification": "TBD"
+

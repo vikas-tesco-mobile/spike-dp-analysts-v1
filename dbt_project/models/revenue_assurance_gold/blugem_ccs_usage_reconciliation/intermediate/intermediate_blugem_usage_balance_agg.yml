@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: intermediate_blugem_usage_balance_agg
+    description: "Intermediate Blugem balance aggregation model used to derive cost, allowance, and gross amount breakdowns per event from the balance detail model."
+    config:
+      meta:
+        "owner__tech": "Revenue Assurance Team"
+        "data__supplier": "MATRIX"
+        "data__domain": "Revenue Assurance"
+        "pii__exists": "false"
+        "pii__classification": "TBD"
