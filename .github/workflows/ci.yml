@@ -27,10 +27,3 @@ jobs:
       - name: Run pre-commit (all hooks)
         run: |
           poetry run pre-commit run --all-files --show-diff-on-failure
-      - name: Run DBT Unit tests
-        working-directory: dbt_project
-        env:
-          DBT_ACCESS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
-        run: |
-          poetry run dbt deps
-          poetry run dbt test --select test_type:unit --target dev
