@@ -64,3 +64,19 @@ spike-dp-core                          spike-dp-analysts
          v                                     v
    Silver tables  ---- trigger ---->   dbt builds gold tables
 ```
+
+## Observations
+
+- Responsibilities are clearly separated. Core owns Spark ingestion and silver processing, while analysts owns dbt models and gold-layer workflows.
+- The cross-repo contract is data, not a packaged library. Analysts depends on silver tables being produced correctly rather than installing a shared wheel at deploy time.
+- Analysts deployment stays relatively simple because this repo only needs its own bundle, dbt project, and workflow definitions.
+- Teams can deploy their repos independently as long as the upstream silver tables and schemas remain compatible.
+- This model matches a producer-consumer workflow well: core publishes curated silver data and analysts builds gold models on top.
+
+## Limitations
+
+- The dependency between repos is looser in code but tighter in data. If core changes silver schemas, refresh cadence, or naming conventions, analysts can break even without any code change in this repo.
+- End-to-end testing across repos is harder because successful analysts deployment does not guarantee that the latest core deployment still produces compatible silver outputs.
+- Release coordination is operational rather than package-based. There is no explicit version pin of shared transformation logic between repos, so compatibility depends on deployment timing and table contracts.
+- Debugging can cross repo boundaries. A failing dbt workflow may actually originate from an upstream core workflow issue or an unexpected silver-table change.
+- Shared logic reuse is weaker than a library-based model because the main integration point is persisted tables, not reusable code artifacts.
